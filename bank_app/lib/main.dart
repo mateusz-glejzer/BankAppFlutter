@@ -1,4 +1,7 @@
+import 'package:bank_app/screen/accounts/accounts.dart';
 import 'package:flutter/material.dart';
+
+import 'screen/cards/cards.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,8 +30,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List pages = [
+    Accounts(),
+    Cards(),
+  ];
+
+  int currentIndex = 0;
+  void onTap(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Text("elo");
+    return Scaffold(
+      body: pages[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.black54,
+          unselectedItemColor: Colors.grey.withOpacity(0.5),
+          currentIndex: currentIndex,
+          onTap: onTap,
+          items: [
+            BottomNavigationBarItem(
+                label: "Accounts",
+                icon: Icon(Icons.abc),
+                backgroundColor: Colors.pink),
+            BottomNavigationBarItem(
+                label: "Cards",
+                icon: Icon(Icons.abc),
+                backgroundColor: Colors.pink)
+          ]),
+    );
   }
 }
