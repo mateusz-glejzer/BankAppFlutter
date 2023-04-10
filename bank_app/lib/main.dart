@@ -45,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
+      drawer: Drawer(),
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -52,15 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
           unselectedItemColor: Colors.grey.withOpacity(0.5),
           currentIndex: currentIndex,
           onTap: onTap,
-          items: [
+          items: const [
             BottomNavigationBarItem(
-                label: "Accounts",
-                icon: Icon(Icons.abc),
-                backgroundColor: Colors.pink),
+              label: "Accounts",
+              icon: Icon(Icons.account_balance_wallet_rounded),
+            ),
             BottomNavigationBarItem(
-                label: "Cards",
-                icon: Icon(Icons.abc),
-                backgroundColor: Colors.pink)
+              label: "Cards",
+              icon: Icon(Icons.credit_card),
+            )
           ]),
     );
   }
