@@ -26,12 +26,19 @@ class _AccountsState extends State<Accounts> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            children: [AccountPanel(), Column(children: transactions)],
-          ),
-        ]);
+    return Container(
+      color: Colors.grey,
+      child: Center(
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [AccountPanel(), Column(children: transactions)],
+              ),
+            ]),
+      ),
+    );
   }
 }

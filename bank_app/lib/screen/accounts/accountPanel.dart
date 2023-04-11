@@ -15,12 +15,35 @@ class _AccountPanelState extends State<AccountPanel> {
     return Container(
       child: Row(
         children: [
-          Column(
-            children: [Text(currentAmmount.toString()), Text(currencyName)],
-          ),
-          CircleAvatar(
-              radius: 15,
-              backgroundImage: AssetImage("./web/icons/pl-flag.png")),
+          Column(children: [
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Text(currentAmmount.toString()),
+                    Text(currencyName)
+                  ],
+                ),
+                CircleAvatar(
+                    radius: 15,
+                    backgroundImage: AssetImage("./web/icons/pl-flag.png"))
+              ],
+            ),
+            Row(children: [
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Add Money"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Exchange"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Icon(Icons.menu),
+              )
+            ]),
+          ]),
         ],
       ),
     );
