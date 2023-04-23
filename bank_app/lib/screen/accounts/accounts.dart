@@ -1,7 +1,9 @@
-import 'package:bank_app/model/transactionViewModel.dart';
-import 'package:bank_app/screen/Accounts/Transaction.dart';
+import 'package:bank_app/model/accountPanelViewModel.dart';
+import 'package:bank_app/model/currencyCode.dart';
+import 'package:bank_app/Transactions/transactionViewModel.dart';
 import 'package:flutter/material.dart';
-
+import '../../Transactions/transactionWidget.dart';
+import '../../Transactions/transactionProvider.dart';
 import 'accountPanel.dart';
 
 class Accounts extends StatefulWidget {
@@ -9,19 +11,27 @@ class Accounts extends StatefulWidget {
   State<StatefulWidget> createState() => _AccountsState();
 }
 
-//Implement later transaction fetching
-getTransations() {}
-
-List<Transaction> transactions = [
-  Transaction(new TransactionViewModel("John", "10.09.09", "2137")),
-  Transaction(new TransactionViewModel("Paul", "11.10.22", "1234")),
-];
-
 class _AccountsState extends State<Accounts> {
+  late AccountPanelViewModel _accountPanelViewModel;
+
+//TODO move from mock data to backend
+  getAccountData(AccountPanelViewModel accountPanelViewModel) {
+    _accountPanelViewModel = accountPanelViewModel;
+  }
+
+  List<TransactionViewModel> transactions = [];
   @override
   void initState() {
-    getTransations();
+    getAccountData(
+        new AccountPanelViewModel(CurrencyCode.PL, "Polski zloty", "269"));
+    getTransactions();
     super.initState();
+  }
+  Future<void> getTransactions() async {
+    final transactionList = await getTransations();
+    setState(() {
+      transactions = transactionList;
+    });
   }
 
   @override
@@ -35,7 +45,16 @@ class _AccountsState extends State<Accounts> {
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [AccountPanel(), Column(children: transactions)],
+                children: [
+                  AccountPanel(_accountPanelViewModel),
+                  Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: ListView.builder(
+                          itemCount: transactions.length,
+                          itemBuilder: (context, index) =>
+                              TransactionWidget(transactions[index]))),
+                ],
               ),
             ]),
       ),
