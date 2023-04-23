@@ -11,10 +11,19 @@ class AccountPanel extends StatefulWidget {
       _AccountPanelState(_accountPanelViewModel);
 }
 
-class _AccountPanelState extends State<AccountPanel> {
+class _AccountPanelState extends State<AccountPanel> with TickerProviderStateMixin {
   AccountPanelViewModel _accountPanelViewModel;
   _AccountPanelState(this._accountPanelViewModel);
   String _defaultFlag = "bank_app/web/icons/money-sack.png";
+  late AnimationController _controller;
+
+  @override
+  void initState()
+  {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 100));
+  }
+  bool isAccountListOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +40,26 @@ class _AccountPanelState extends State<AccountPanel> {
               radius: 15,
               backgroundImage: AssetImage(CountryFlagMap
                       .countryFlag[_accountPanelViewModel.currencyCode] ??
-                  _defaultFlag))
+                  _defaultFlag)),
+          GestureDetector(onTap: (){
+            if (isAccountListOpen) {
+            _controller.reverse();
+            } else {
+              _controller.forward();
+            }
+            isAccountListOpen = !isAccountListOpen;
+            
+          },child: RotationTransition(
+        turns: Tween(begin: 0.0, end: isAccountListOpen ? 0.5 : 0.0).animate(_controller),
+        child: Icon(Icons.keyboard_arrow_up),))
         ],
       ),
-      Row(
-        children: [
+      Row(children: [
+        ElevatedButton(onPressed: () {}, child: Text("Add Money")),
         ElevatedButton(
           onPressed: () {},
-          child: Row(
-            children: [Text("Add Money"), Icon(Icons.add)],
-          ),
+          child: Text("Exchange"),
         ),
-        ElevatedButton(
-          onPressed: () {},
-          child: Row(
-            children: [Text("Exchange"), Icon(Icons.currency_exchange)],
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () {},
-          child: Icon(Icons.menu),
-        )
       ]),
     ]);
   }
