@@ -1,6 +1,5 @@
 import 'package:bank_app/screen/accounts/accounts.dart';
-import 'package:flutter/material.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'screen/cards/cards.dart';
 
 void main() {
@@ -11,11 +10,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Bank app',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: CupertinoThemeData(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -44,26 +41,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: Drawer(),
-      body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.black54,
-          unselectedItemColor: Colors.grey.withOpacity(0.5),
-          currentIndex: currentIndex,
-          onTap: onTap,
-          items: const [
-            BottomNavigationBarItem(
-              label: "Accounts",
-              icon: Icon(Icons.account_balance_wallet_rounded),
-            ),
-            BottomNavigationBarItem(
-              label: "Cards",
-              icon: Icon(Icons.credit_card),
-            )
-          ]),
+    return CupertinoPageScaffold(
+      child: CupertinoTabScaffold(
+        tabBuilder: (BuildContext context, index) {
+          return pages[index];
+        },
+        tabBar: CupertinoTabBar(
+            inactiveColor: CupertinoColors.inactiveGray,
+            activeColor: CupertinoColors.white,
+            items: const [
+              BottomNavigationBarItem(
+                label: "Accounts",
+                icon: Icon(CupertinoIcons.money_dollar),
+              ),
+              BottomNavigationBarItem(
+                label: "Cards",
+                icon: Icon(CupertinoIcons.ant),
+              )
+            ]),
+      ),
     );
   }
 }

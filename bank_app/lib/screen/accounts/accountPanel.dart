@@ -1,6 +1,5 @@
 import 'package:bank_app/model/countryFlagMap.dart';
-import 'package:flutter/material.dart';
-
+import 'package:flutter/cupertino.dart';
 import '../../model/accountPanelViewModel.dart';
 
 class AccountPanel extends StatefulWidget {
@@ -11,24 +10,27 @@ class AccountPanel extends StatefulWidget {
       _AccountPanelState(_accountPanelViewModel);
 }
 
-class _AccountPanelState extends State<AccountPanel> with TickerProviderStateMixin {
+class _AccountPanelState extends State<AccountPanel>
+    with TickerProviderStateMixin {
   AccountPanelViewModel _accountPanelViewModel;
   _AccountPanelState(this._accountPanelViewModel);
   String _defaultFlag = "bank_app/web/icons/money-sack.png";
   late AnimationController _controller;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 100));
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 100));
   }
+
   bool isAccountListOpen = false;
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(
             children: [
@@ -36,29 +38,39 @@ class _AccountPanelState extends State<AccountPanel> with TickerProviderStateMix
               Text(_accountPanelViewModel.currencyName)
             ],
           ),
-          CircleAvatar(
-              radius: 15,
-              backgroundImage: AssetImage(CountryFlagMap
-                      .countryFlag[_accountPanelViewModel.currencyCode] ??
-                  _defaultFlag)),
-          GestureDetector(onTap: (){
-            if (isAccountListOpen) {
-            _controller.reverse();
-            } else {
-              _controller.forward();
-            }
-            isAccountListOpen = !isAccountListOpen;
-            
-          },child: RotationTransition(
-        turns: Tween(begin: 0.0, end: isAccountListOpen ? 0.5 : 0.0).animate(_controller),
-        child: Icon(Icons.keyboard_arrow_up),))
+          // CircleAvatar(
+          //     radius: 15,
+          //     backgroundImage: AssetImage(CountryFlagMap
+          //             .countryFlag[_accountPanelViewModel.currencyCode] ??
+          //         _defaultFlag)),
+          GestureDetector(
+              onTap: () {
+                if (isAccountListOpen) {
+                  _controller.reverse();
+                } else {
+                  _controller.forward();
+                }
+                setState(() {
+                  isAccountListOpen = !isAccountListOpen;
+                });
+              },
+              child: RotationTransition(
+                turns: Tween(begin: 0.0, end: isAccountListOpen ? 0.5 : 0.0)
+                    .animate(_controller),
+                child: Icon(CupertinoIcons.option),
+              ))
         ],
       ),
-      Row(children: [
-        ElevatedButton(onPressed: () {}, child: Text("Add Money")),
-        ElevatedButton(
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        CupertinoButton(
           onPressed: () {},
-          child: Text("Exchange"),
+          color: CupertinoColors.black,
+          child: Text("Add Money", style: TextStyle(color: CupertinoColors.white)),
+        ),
+        CupertinoButton(
+          onPressed: () {},
+          color: CupertinoColors.black,
+          child: Text("Exchange", style: TextStyle(color: CupertinoColors.white)),
         ),
       ]),
     ]);

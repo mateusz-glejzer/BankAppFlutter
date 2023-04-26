@@ -1,10 +1,10 @@
 import 'package:bank_app/model/accountPanelViewModel.dart';
 import 'package:bank_app/model/currencyCode.dart';
 import 'package:bank_app/Transactions/transactionViewModel.dart';
-import 'package:flutter/material.dart';
 import '../../Transactions/transactionWidget.dart';
 import '../../Transactions/transactionProvider.dart';
 import 'accountPanel.dart';
+import 'package:flutter/cupertino.dart';
 
 class Accounts extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ class _AccountsState extends State<Accounts> {
     getTransactions();
     super.initState();
   }
+
   Future<void> getTransactions() async {
     final transactionList = await getTransations();
     setState(() {
@@ -37,7 +38,7 @@ class _AccountsState extends State<Accounts> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
+      color: CupertinoColors.lightBackgroundGray,
       child: Center(
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,7 +47,10 @@ class _AccountsState extends State<Accounts> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AccountPanel(_accountPanelViewModel),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: AccountPanel(_accountPanelViewModel),
+                  ),
                   Container(
                       width: MediaQuery.of(context).size.width / 2,
                       height: MediaQuery.of(context).size.height / 3,
