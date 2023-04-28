@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               BottomNavigationBarItem(
                 label: "Cards",
-                icon: Icon(CupertinoIcons.ant),
+                icon: Icon(CupertinoIcons.creditcard),
               )
             ]),
       ),
