@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class Cards extends StatefulWidget {
+  const Cards({super.key});
+
   @override
   State<StatefulWidget> createState() => _CardsState();
 }
@@ -8,6 +10,6 @@ class Cards extends StatefulWidget {
 class _CardsState extends State<Cards> {
   @override
   Widget build(BuildContext context) {
-    return Text("Cards");
+    return const Text("Cards");
   }
 }

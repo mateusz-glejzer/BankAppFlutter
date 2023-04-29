@@ -1,24 +1,36 @@
-import 'package:bank_app/model/accountPanelViewModel.dart';
-import 'package:bank_app/model/currencyCode.dart';
-import 'package:bank_app/Transactions/transactionViewModel.dart';
-import 'package:bank_app/screen/accounts/accountList.dart';
-import '../../Transactions/transactionWidget.dart';
-import '../../Transactions/transactionProvider.dart';
-import 'accountPanel.dart';
+import 'package:bank_app/model/currency_code.dart';
+import 'package:bank_app/Transactions/transaction_model.dart';
+import 'package:bank_app/screen/accounts/account_list.dart';
+import '../../Transactions/transaction_widget.dart';
+import '../../providers/transaction_provider.dart';
+import '../../model/account_tile_model.dart';
+import 'account_panel.dart';
 import 'package:flutter/cupertino.dart';
 
 class Accounts extends StatefulWidget {
+  const Accounts({super.key});
+
   @override
   State<StatefulWidget> createState() => _AccountsState();
 }
 
 class _AccountsState extends State<Accounts> {
-  late AccountPanelViewModel _accountPanelViewModel;
+  late List<AccountTileModel> _accounts;
   bool showAccountList = false;
+  late AccountTileModel currentAccount;
+  late ValueNotifier<AccountTileModel> currentAccountNotifier;
 
 //TODO move from mock data to backend
-  getAccountData(AccountPanelViewModel accountPanelViewModel) {
-    _accountPanelViewModel = accountPanelViewModel;
+  getAccountData(List<AccountTileModel> accountPanelViewModel) {
+    _accounts = accountPanelViewModel;
+  }
+
+  setCurrentAccount(AccountTileModel model) {
+    setState(() {
+      currentAccount = model;
+      showAccountList = false;
+      this.getTransactions(model.currencyCode);
+    });
   }
 
   toogleAccountList() {
@@ -30,14 +42,17 @@ class _AccountsState extends State<Accounts> {
   List<TransactionViewModel> transactions = [];
   @override
   void initState() {
-    getAccountData(
-        new AccountPanelViewModel(CurrencyCode.PL, "Polski zloty", "269"));
-    getTransactions();
+    getAccountData([
+      AccountTileModel(CurrencyCode.pln, "Polski zloty", "269"),
+      AccountTileModel(CurrencyCode.gbp, "Great Britain Pound", "420")
+    ]);
+    getTransactions(CurrencyCode.pln);
+    currentAccount = _accounts[0];
     super.initState();
   }
 
-  Future<void> getTransactions() async {
-    final transactionList = await getTransations();
+  Future<void> getTransactions(CurrencyCode currencyCode) async {
+    final transactionList = await getTransations(currencyCode);
     setState(() {
       transactions = transactionList;
     });
@@ -58,12 +73,11 @@ class _AccountsState extends State<Accounts> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: AccountPanel(
-                              _accountPanelViewModel, toogleAccountList),
-                        ),
-                        Container(
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: AccountPanel(
+                                currentAccount, toogleAccountList)),
+                        SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             height: MediaQuery.of(context).size.height / 3,
                             child: ListView.builder(
@@ -80,9 +94,7 @@ class _AccountsState extends State<Accounts> {
           visible: showAccountList,
           maintainState: true,
           child: Expanded(
-            child: Container(
-              child: AccountList(),
-            ),
+            child: AccountList(_accounts, setCurrentAccount),
           ),
         ),
       ],
