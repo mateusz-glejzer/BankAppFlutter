@@ -13,7 +13,7 @@ Future<List<TransactionViewModel>> getTransations() async {
     print(jsonResponse);
     List<TransactionViewModel> result = [];
 
-    jsonResponse.forEach((element) {
+    for (var element in jsonResponse) {
       
       final transactionDto = transaction_dto.fromJson(element as Map<String, dynamic>);
       final dateSplitted = transactionDto.date.split('.');
@@ -21,7 +21,7 @@ Future<List<TransactionViewModel>> getTransations() async {
           int.parse(dateSplitted[0]));
       result.add(
           TransactionViewModel(transactionDto.name, date, transactionDto.sum));
-    });
+    }
 
     return result;
   } finally {

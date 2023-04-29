@@ -1,24 +1,26 @@
-import 'package:bank_app/model/accountPanelViewModel.dart';
 import 'package:bank_app/model/currencyCode.dart';
 import 'package:bank_app/Transactions/transactionViewModel.dart';
 import 'package:bank_app/screen/accounts/accountList.dart';
 import '../../Transactions/transactionWidget.dart';
-import '../../Transactions/transactionProvider.dart';
+import '../../providers/transactionProvider.dart';
+import '../../model/accountTileModel.dart';
 import 'accountPanel.dart';
 import 'package:flutter/cupertino.dart';
 
 class Accounts extends StatefulWidget {
+  const Accounts({super.key});
+
   @override
   State<StatefulWidget> createState() => _AccountsState();
 }
 
 class _AccountsState extends State<Accounts> {
-  late AccountPanelViewModel _accountPanelViewModel;
+  late List<AccountTileModel> _accounts;
   bool showAccountList = false;
 
 //TODO move from mock data to backend
-  getAccountData(AccountPanelViewModel accountPanelViewModel) {
-    _accountPanelViewModel = accountPanelViewModel;
+  getAccountData(List<AccountTileModel> accountPanelViewModel) {
+    _accounts = accountPanelViewModel;
   }
 
   toogleAccountList() {
@@ -30,8 +32,10 @@ class _AccountsState extends State<Accounts> {
   List<TransactionViewModel> transactions = [];
   @override
   void initState() {
-    getAccountData(
-        new AccountPanelViewModel(CurrencyCode.PL, "Polski zloty", "269"));
+    getAccountData([
+      AccountTileModel(CurrencyCode.PL, "Polski zloty", "269"),
+      AccountTileModel(CurrencyCode.GBP, "Great Britain Pound", "269")
+    ]);
     getTransactions();
     super.initState();
   }
@@ -58,12 +62,11 @@ class _AccountsState extends State<Accounts> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width / 2,
-                          child: AccountPanel(
-                              _accountPanelViewModel, toogleAccountList),
+                          child: AccountPanel(_accounts[0], toogleAccountList),
                         ),
-                        Container(
+                        SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             height: MediaQuery.of(context).size.height / 3,
                             child: ListView.builder(
@@ -80,9 +83,7 @@ class _AccountsState extends State<Accounts> {
           visible: showAccountList,
           maintainState: true,
           child: Expanded(
-            child: Container(
-              child: AccountList(),
-            ),
+            child: AccountList(_accounts),
           ),
         ),
       ],

@@ -1,1 +1,1 @@
-enum CurrencyCode { PL, USD, EUR, CHF }
+enum CurrencyCode { PL, USD, EUR, GBP }

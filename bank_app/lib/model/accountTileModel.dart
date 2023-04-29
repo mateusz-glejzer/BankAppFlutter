@@ -1,8 +1,8 @@
 import 'package:bank_app/model/currencyCode.dart';
 
-class AccountPanelViewModel {
+class AccountTileModel {
   final CurrencyCode currencyCode;
   final String currencyName;
   final String amount;
-  AccountPanelViewModel(this.currencyCode, this.currencyName, this.amount);
+  AccountTileModel(this.currencyCode, this.currencyName, this.amount);
 }
