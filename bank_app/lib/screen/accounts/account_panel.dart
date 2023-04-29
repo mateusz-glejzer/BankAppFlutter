@@ -1,37 +1,34 @@
-import 'package:bank_app/model/countryFlagMap.dart';
+import 'package:bank_app/model/country_flag_map.dart';
 import 'package:flutter/cupertino.dart';
-import '../../model/accountTileModel.dart';
+import '../../model/account_tile_model.dart';
 
 class AccountPanel extends StatefulWidget {
-  final AccountTileModel _accountPanelViewModel;
+  final AccountTileModel currentAccount;
   final void Function() onGectureDetectorClicked;
-  const AccountPanel(this._accountPanelViewModel, this.onGectureDetectorClicked, {super.key});
+  const AccountPanel(this.currentAccount, this.onGectureDetectorClicked,
+      {super.key});
   @override
-  State<StatefulWidget> createState() =>
-      _AccountPanelState(_accountPanelViewModel, onGectureDetectorClicked);
+  State<StatefulWidget> createState() => _AccountPanelState();
 }
 
 class _AccountPanelState extends State<AccountPanel>
     with TickerProviderStateMixin {
-  final AccountTileModel _accountPanelViewModel;
-  final void Function() onGectureDetectorClicked;
-
-  _AccountPanelState(
-      this._accountPanelViewModel, this.onGectureDetectorClicked);
-
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 100));
   }
 
   bool isAccountListOpen = false;
 
   @override
   Widget build(BuildContext context) {
+    AccountTileModel currentAccount = widget.currentAccount;
+    void Function() onGectureDetectorClicked = widget.onGectureDetectorClicked;
+
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,8 +37,8 @@ class _AccountPanelState extends State<AccountPanel>
             children: [
               Column(
                 children: [
-                  Text(_accountPanelViewModel.amount),
-                  Text(_accountPanelViewModel.currencyName)
+                  Text(currentAccount.amount),
+                  Text(currentAccount.currencyName),
                 ],
               ),
               GestureDetector(
@@ -70,8 +67,8 @@ class _AccountPanelState extends State<AccountPanel>
           Image(
             width: 60.0,
             height: 60.0,
-            image: AssetImage(CountryFlagMap
-                    .countryFlag[_accountPanelViewModel.currencyCode]!),
+            image: AssetImage(
+                CountryFlagMap.countryFlag[currentAccount.currencyCode]!),
           ),
         ],
       ),
@@ -79,14 +76,14 @@ class _AccountPanelState extends State<AccountPanel>
         CupertinoButton(
           onPressed: () {},
           color: CupertinoColors.black,
-          child:
-              const Text("Add Money", style: TextStyle(color: CupertinoColors.white)),
+          child: const Text("Add Money",
+              style: TextStyle(color: CupertinoColors.white)),
         ),
         CupertinoButton(
           onPressed: () {},
           color: CupertinoColors.black,
-          child:
-              const Text("Exchange", style: TextStyle(color: CupertinoColors.white)),
+          child: const Text("Exchange",
+              style: TextStyle(color: CupertinoColors.white)),
         ),
       ]),
     ]);

@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
 class Navigation extends StatefulWidget {
+  const Navigation({super.key});
+
   @override
   State<StatefulWidget> createState() => _NavigationState();
 }

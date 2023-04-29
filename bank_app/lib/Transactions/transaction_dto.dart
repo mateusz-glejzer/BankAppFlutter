@@ -1,11 +1,11 @@
-class transaction_dto {
+class TransactionDto {
   final String name;
   final String date;
   final String sum;
   final String type;
-  const transaction_dto(this.name, this.date, this.sum, this.type);
+  const TransactionDto(this.name, this.date, this.sum, this.type);
 
-  transaction_dto.fromJson(Map<String, dynamic> json)
+  TransactionDto.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         date = json['date'],
         sum = json['sum'],

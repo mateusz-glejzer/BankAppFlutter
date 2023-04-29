@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'transactionViewModel.dart';
+import 'transaction_model.dart';
 
 class TransactionWidget extends StatelessWidget {
   final TransactionViewModel transationData;
@@ -9,7 +9,7 @@ class TransactionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoListTile(
       title: Text(transationData.name,
-          style: TextStyle(color: CupertinoColors.black)),
+          style: const TextStyle(color: CupertinoColors.black)),
       subtitle: Text(
           '${transationData.date.day} / ${transationData.date.month} / ${transationData.date.year}'),
       trailing: Text(transationData.sum),

@@ -1,4 +1,4 @@
-import 'package:bank_app/model/currencyCode.dart';
+import 'package:bank_app/model/currency_code.dart';
 
 class AccountTileModel {
   final CurrencyCode currencyCode;
