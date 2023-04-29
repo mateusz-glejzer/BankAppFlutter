@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:bank_app/Transactions/transaction_dto.dart';
 import 'package:bank_app/Transactions/transaction_model.dart';
-Future<List<TransactionViewModel>> getTransations() async {
+import 'package:bank_app/model/currency_code.dart';
+Future<List<TransactionViewModel>> getTransations(CurrencyCode currencyCode) async {
   final client = HttpClient();
   try {
-    HttpClientRequest request = await client.get('localhost', 5000, '/');
+    HttpClientRequest request = await client.get('localhost', 5000, '/transfers/$currencyCode');
     HttpClientResponse response = await request.close();
     final stringData = await response.transform(utf8.decoder).join();
     List<dynamic> jsonResponse = jsonDecode(stringData);

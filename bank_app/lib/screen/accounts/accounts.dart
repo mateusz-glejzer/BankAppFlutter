@@ -28,6 +28,8 @@ class _AccountsState extends State<Accounts> {
   setCurrentAccount(AccountTileModel model) {
     setState(() {
       currentAccount = model;
+      showAccountList = false;
+      this.getTransactions(model.currencyCode);
     });
   }
 
@@ -41,16 +43,16 @@ class _AccountsState extends State<Accounts> {
   @override
   void initState() {
     getAccountData([
-      AccountTileModel(CurrencyCode.pl, "Polski zloty", "269"),
-      AccountTileModel(CurrencyCode.gbp, "Great Britain Pound", "269")
+      AccountTileModel(CurrencyCode.pln, "Polski zloty", "269"),
+      AccountTileModel(CurrencyCode.gbp, "Great Britain Pound", "420")
     ]);
-    getTransactions();
+    getTransactions(CurrencyCode.pln);
     currentAccount = _accounts[0];
     super.initState();
   }
 
-  Future<void> getTransactions() async {
-    final transactionList = await getTransations();
+  Future<void> getTransactions(CurrencyCode currencyCode) async {
+    final transactionList = await getTransations(currencyCode);
     setState(() {
       transactions = transactionList;
     });
