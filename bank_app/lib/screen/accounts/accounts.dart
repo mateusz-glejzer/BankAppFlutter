@@ -2,6 +2,7 @@ import 'package:bank_app/model/currency_code.dart';
 import 'package:bank_app/Transactions/transaction_model.dart';
 import 'package:bank_app/screen/accounts/account_list.dart';
 import '../../Transactions/transaction_widget.dart';
+import '../../providers/accounts_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../model/account_tile_model.dart';
 import 'account_panel.dart';
@@ -42,10 +43,7 @@ class _AccountsState extends State<Accounts> {
   List<TransactionViewModel> transactions = [];
   @override
   void initState() {
-    getAccountData([
-      AccountTileModel(CurrencyCode.pln, "Polski zloty", "269"),
-      AccountTileModel(CurrencyCode.gbp, "Great Britain Pound", "420")
-    ]);
+    getAccountData(getUserAccounts());
     getTransactions(CurrencyCode.pln);
     currentAccount = _accounts[0];
     super.initState();

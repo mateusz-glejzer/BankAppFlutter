@@ -1,4 +1,5 @@
 import 'package:bank_app/model/country_flag_map.dart';
+import 'package:bank_app/screen/accounts/exchange/exchange_widget.dart';
 import 'package:flutter/cupertino.dart';
 import '../../model/account_tile_model.dart';
 
@@ -80,10 +81,14 @@ class _AccountPanelState extends State<AccountPanel>
               style: TextStyle(color: CupertinoColors.white)),
         ),
         CupertinoButton(
-          onPressed: () {},
+          onPressed: () => Navigator.of(context).push(
+              CupertinoPageRoute(builder: (context) => const ExchangeWidget())),
           color: CupertinoColors.black,
-          child: const Text("Exchange",
-              style: TextStyle(color: CupertinoColors.white)),
+          child: const Hero(
+            tag: 'exchange',
+            child: Text("Exchange",
+                style: TextStyle(color: CupertinoColors.white)),
+          ),
         ),
       ]),
     ]);
