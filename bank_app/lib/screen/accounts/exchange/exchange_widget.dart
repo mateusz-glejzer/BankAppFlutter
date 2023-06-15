@@ -1,9 +1,12 @@
-import 'package:bank_app/screen/accounts/account_list.dart';
+import 'dart:convert';
+
+import 'package:bank_app/screen/accounts/exchange/exchange_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import '../../../model/account_tile_model.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../providers/transaction_provider.dart';
 
 class ExchangeWidget extends StatefulWidget {
   const ExchangeWidget({super.key});
@@ -37,7 +40,59 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   late AccountTileModel _itemSelectedToSell;
   late AccountTileModel _itemSelectedToBuy;
   late TextEditingController _sellTextController;
-  late TextEditingController _buyTextController;
+  late int buyValue;
+
+  void _showAlertDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Alert'),
+        content: const Text('Selected value is too small to exchange'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showExchangeConfirmationDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Alert'),
+        content:
+            Text('Do you want to buy amount of: $buyValue of chosen currency?'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+              exchangeMoney(
+                _itemSelectedToSell.currencyCode,
+                _itemSelectedToBuy.currencyCode,
+                int.parse(_sellTextController.text),
+                buyValue,
+              );
+            },
+            child: const Text('Yes'),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('No'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -46,7 +101,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     _itemSelectedToSell = accounts[0];
     _itemSelectedToBuy = accounts[1];
     _sellTextController = TextEditingController(text: '0');
-    _buyTextController = TextEditingController(text: '0');
+    buyValue = 0;
   }
 
   @override
@@ -147,20 +202,36 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             ),
             SizedBox(
               width: 200,
-              child: CupertinoTextField(
-                controller: _buyTextController,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-                ],
-              ),
+              child: Text(buyValue.toString()),
             ),
           ],
         ),
         Column(
           children: [
             CupertinoButton(
-              onPressed: () => {},
+              onPressed: () => {
+                //TODO validate request if an user has correct amount of money
+                print(_itemSelectedToSell.currencyCode.toString()),
+                previewExchange(ExchangePreview(
+                        _itemSelectedToSell.currencyCode.toString(),
+                        _itemSelectedToBuy.currencyCode.toString(),
+                        int.parse(_sellTextController.text)))
+                    .then((response) {
+                  var json = jsonDecode(response.body);
+                  var value = json['Message'];
+                  if (value > 0) {
+                    setState(() {
+                      buyValue = value;
+                    });
+                    _showExchangeConfirmationDialog(context);
+                  } else {
+                    setState(() {
+                      buyValue = 0;
+                    });
+                    _showAlertDialog(context);
+                  }
+                }),
+              },
               child: const Text(
                 'Exchange',
                 style: TextStyle(color: CupertinoColors.white),

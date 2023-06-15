@@ -11,8 +11,10 @@ class TransactionWidget extends StatelessWidget {
       title: Text(transationData.name,
           style: const TextStyle(color: CupertinoColors.black)),
       subtitle: Text(
-          '${transationData.date.day} / ${transationData.date.month} / ${transationData.date.year}'),
-      trailing: Text(transationData.sum),
+          '${transationData.date.day} / ${transationData.date.month} / ${transationData.date.year}',
+          style: const TextStyle(color: CupertinoColors.black)),
+      trailing: Text(transationData.sum,
+          style: const TextStyle(color: CupertinoColors.black)),
     );
   }
 }

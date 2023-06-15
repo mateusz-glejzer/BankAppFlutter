@@ -16,14 +16,21 @@ class Accounts extends StatefulWidget {
 }
 
 class _AccountsState extends State<Accounts> {
-  late List<AccountTileModel> _accounts;
+  late List<AccountTileModel> _accounts = [
+    //do smth with loading rather than showing this temporary solution
+    AccountTileModel(CurrencyCode.pln, "Loading", "0")
+  ];
   bool showAccountList = false;
   late AccountTileModel currentAccount;
   late ValueNotifier<AccountTileModel> currentAccountNotifier;
 
 //TODO move from mock data to backend
-  getAccountData(List<AccountTileModel> accountPanelViewModel) {
-    _accounts = accountPanelViewModel;
+  getAccountData(
+      Future<List<AccountTileModel>> accountPanelViewModelFunc) async {
+    _accounts = await accountPanelViewModelFunc;
+    setState(() {
+      currentAccount = _accounts[0];
+    });
   }
 
   setCurrentAccount(AccountTileModel model) {

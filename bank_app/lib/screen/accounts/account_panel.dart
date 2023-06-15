@@ -1,4 +1,5 @@
 import 'package:bank_app/model/country_flag_map.dart';
+import 'package:bank_app/providers/accounts_provider.dart';
 import 'package:bank_app/screen/accounts/exchange/exchange_widget.dart';
 import 'package:flutter/cupertino.dart';
 import '../../model/account_tile_model.dart';
@@ -15,18 +16,27 @@ class AccountPanel extends StatefulWidget {
 class _AccountPanelState extends State<AccountPanel>
     with TickerProviderStateMixin {
   late AnimationController _controller;
+  var currentBalance = '0';
 
   @override
   void initState() {
     super.initState();
+    getAccountBalance(widget.currentAccount.currencyCode).then((value) => updateBalance(value));
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
+  }
+  updateBalance(String value)
+  {
+    setState(() {
+      currentBalance = value;
+    });
   }
 
   bool isAccountListOpen = false;
 
   @override
   Widget build(BuildContext context) {
+    getAccountBalance(widget.currentAccount.currencyCode).then((value) => updateBalance(value));
     AccountTileModel currentAccount = widget.currentAccount;
     void Function() onGectureDetectorClicked = widget.onGectureDetectorClicked;
 
@@ -38,8 +48,10 @@ class _AccountPanelState extends State<AccountPanel>
             children: [
               Column(
                 children: [
-                  Text(currentAccount.amount),
-                  Text(currentAccount.currencyName),
+                  Text(currentBalance,
+                      style: const TextStyle(color: CupertinoColors.black)),
+                  Text(currentAccount.currencyName,
+                      style: const TextStyle(color: CupertinoColors.black)),
                 ],
               ),
               GestureDetector(
