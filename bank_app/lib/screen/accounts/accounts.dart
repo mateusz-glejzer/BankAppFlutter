@@ -65,6 +65,7 @@ class _AccountsState extends State<Accounts> {
 
   @override
   Widget build(BuildContext context) {
+    getTransactions(currentAccount.currencyCode);
     return Column(
       children: [
         Expanded(

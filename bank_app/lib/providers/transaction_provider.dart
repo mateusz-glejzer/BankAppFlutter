@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bank_app/Transactions/transaction_dto.dart';
 import 'package:bank_app/Transactions/transaction_model.dart';
 import 'package:bank_app/model/currency_code.dart';
-import 'package:http/http.dart';
 
 Future<List<TransactionViewModel>> getTransationsInternal(
     CurrencyCode currencyCode) async {
