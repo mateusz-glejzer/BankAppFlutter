@@ -1,4 +1,6 @@
 import 'package:bank_app/screen/accounts/accounts.dart';
+import 'package:bank_app/screen/main/login.dart';
+import 'package:bank_app/screen/main/login_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'screen/cards/cards.dart';
 
@@ -21,16 +23,15 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
+  final String? loginToken = null;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState(loginToken);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List pages = [
-    const Accounts(),
-    const Cards(),
-  ];
+  _MyHomePageState(this.loginToken);
+  late String? loginToken;
 
   int currentIndex = 0;
   void onTap(int index) {
@@ -41,25 +42,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: CupertinoTabScaffold(
-        tabBuilder: (BuildContext context, index) {
-          return pages[index];
-        },
-        tabBar: CupertinoTabBar(
-            inactiveColor: CupertinoColors.inactiveGray,
-            activeColor: CupertinoColors.white,
-            items: const [
-              BottomNavigationBarItem(
-                label: "Accounts",
-                icon: Icon(CupertinoIcons.money_dollar),
-              ),
-              BottomNavigationBarItem(
-                label: "Cards",
-                icon: Icon(CupertinoIcons.creditcard),
-              )
-            ]),
-      ),
-    );
+    List pages = [
+      Accounts(loginToken),
+      const Cards(),
+    ];
+    return loginToken == null
+        ? Login(
+            onLogged: (loginToken) => {
+                  this.loginToken = loginToken,
+                  setState(() {
+                    this.loginToken = loginToken;
+                  })
+                })
+        : CupertinoPageScaffold(
+            child: CupertinoTabScaffold(
+              tabBuilder: (BuildContext context, index) {
+                return pages[index];
+              },
+              tabBar: CupertinoTabBar(
+                  inactiveColor: CupertinoColors.inactiveGray,
+                  activeColor: CupertinoColors.white,
+                  items: const [
+                    BottomNavigationBarItem(
+                      label: "Accounts",
+                      icon: Icon(CupertinoIcons.money_dollar),
+                    ),
+                    BottomNavigationBarItem(
+                      label: "Cards",
+                      icon: Icon(CupertinoIcons.creditcard),
+                    )
+                  ]),
+            ),
+          );
   }
 }

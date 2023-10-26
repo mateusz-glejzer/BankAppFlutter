@@ -9,7 +9,8 @@ import 'account_panel.dart';
 import 'package:flutter/cupertino.dart';
 
 class Accounts extends StatefulWidget {
-  const Accounts({super.key});
+  const Accounts(this.Token, {super.key});
+  final String? Token;
 
   @override
   State<StatefulWidget> createState() => _AccountsState();
@@ -50,14 +51,14 @@ class _AccountsState extends State<Accounts> {
   List<TransactionViewModel> transactions = [];
   @override
   void initState() {
-    getAccountData(getUserAccounts());
+    getAccountData(getUserAccounts(widget.Token!));
     getTransactions(CurrencyCode.pln);
     currentAccount = _accounts[0];
     super.initState();
   }
 
   Future<void> getTransactions(CurrencyCode currencyCode) async {
-    final transactionList = await getTransations(currencyCode);
+    final transactionList = await getTransations(currencyCode, widget.Token!);
     setState(() {
       transactions = transactionList;
     });
@@ -81,8 +82,8 @@ class _AccountsState extends State<Accounts> {
                       children: [
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
-                            child: AccountPanel(
-                                currentAccount, toogleAccountList)),
+                            child: AccountPanel(currentAccount,
+                                toogleAccountList, widget.Token!)),
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             height: MediaQuery.of(context).size.height / 3,
@@ -100,7 +101,7 @@ class _AccountsState extends State<Accounts> {
           visible: showAccountList,
           maintainState: true,
           child: Expanded(
-            child: AccountList(_accounts, setCurrentAccount),
+            child: AccountList(widget.Token!, _accounts, setCurrentAccount),
           ),
         ),
       ],

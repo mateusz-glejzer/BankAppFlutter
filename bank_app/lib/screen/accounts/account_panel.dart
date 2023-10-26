@@ -7,7 +7,9 @@ import '../../model/account_tile_model.dart';
 class AccountPanel extends StatefulWidget {
   final AccountTileModel currentAccount;
   final void Function() onGectureDetectorClicked;
-  const AccountPanel(this.currentAccount, this.onGectureDetectorClicked,
+  final String token;
+  const AccountPanel(
+      this.currentAccount, this.onGectureDetectorClicked, this.token,
       {super.key});
   @override
   State<StatefulWidget> createState() => _AccountPanelState();
@@ -21,12 +23,13 @@ class _AccountPanelState extends State<AccountPanel>
   @override
   void initState() {
     super.initState();
-    getAccountBalance(widget.currentAccount.currencyCode).then((value) => updateBalance(value));
+    getAccountBalance(widget.currentAccount.currencyCode, widget.token)
+        .then((value) => updateBalance(value));
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
   }
-  updateBalance(String value)
-  {
+
+  updateBalance(String value) {
     setState(() {
       currentBalance = value;
     });
@@ -36,7 +39,8 @@ class _AccountPanelState extends State<AccountPanel>
 
   @override
   Widget build(BuildContext context) {
-    getAccountBalance(widget.currentAccount.currencyCode).then((value) => updateBalance(value));
+    getAccountBalance(widget.currentAccount.currencyCode, widget.token)
+        .then((value) => updateBalance(value));
     AccountTileModel currentAccount = widget.currentAccount;
     void Function() onGectureDetectorClicked = widget.onGectureDetectorClicked;
 
@@ -93,8 +97,8 @@ class _AccountPanelState extends State<AccountPanel>
               style: TextStyle(color: CupertinoColors.white)),
         ),
         CupertinoButton(
-          onPressed: () => Navigator.of(context).push(
-              CupertinoPageRoute(builder: (context) => const ExchangeWidget())),
+          onPressed: () => Navigator.of(context).push(CupertinoPageRoute(
+              builder: (context) => ExchangeWidget(widget.token))),
           color: CupertinoColors.black,
           child: const Hero(
             tag: 'exchange',

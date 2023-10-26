@@ -6,8 +6,9 @@ import '../../providers/accounts_provider.dart';
 
 class AccountTile extends StatefulWidget {
   final AccountTileModel model;
+  final String token;
 
-  const AccountTile(this.model, {super.key});
+  const AccountTile(this.model, this.token, {super.key});
   @override
   State<StatefulWidget> createState() => _AccountTileState();
 }
@@ -17,7 +18,7 @@ class _AccountTileState extends State<AccountTile> {
   @override
   Widget build(BuildContext context) {
     final AccountTileModel model = widget.model;
-    getAccountBalance(model.currencyCode)
+    getAccountBalance(model.currencyCode, widget.token)
         .then((value) => currentBalance = value);
     return CupertinoListTile(
       leading: Image(

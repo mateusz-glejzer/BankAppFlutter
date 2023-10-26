@@ -18,9 +18,9 @@ var accountMap = {
   CurrencyCode.eur: AccountTileModel(CurrencyCode.eur, "Euro", "0"),
 };
 
-Future<AccountTileModel> getAccount(CurrencyCode code) async {
+Future<AccountTileModel> getAccount(CurrencyCode code, String token) async {
   var account = accountMap[code]!;
-  var balance = await getAccountBalance(code);
+  var balance = await getAccountBalance(code, token);
   account.amount = balance.toString();
   return account;
 }
@@ -29,16 +29,16 @@ List<AccountTileModel> getAllAccounts() {
   return allAccounts;
 }
 
-Future<List<AccountTileModel>> getUserAccounts() async {
-  for(var acc in allAccounts)
-  {
-    acc.amount = await getAccountBalance(acc.currencyCode);
+Future<List<AccountTileModel>> getUserAccounts(String token) async {
+  for (var acc in allAccounts) {
+    acc.amount = await getAccountBalance(acc.currencyCode, token);
   }
   return allAccounts;
 }
 
-Future<String> getAccountBalance(CurrencyCode currencyCode) async {
-  var transactions = await getTransations(currencyCode);
+Future<String> getAccountBalance(
+    CurrencyCode currencyCode, String token) async {
+  var transactions = await getTransations(currencyCode, token);
   var balance = 0;
   for (var transaction in transactions) {
     balance += int.parse(transaction.sum);

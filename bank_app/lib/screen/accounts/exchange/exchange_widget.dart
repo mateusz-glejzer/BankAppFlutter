@@ -9,7 +9,8 @@ import '../../../providers/accounts_provider.dart';
 import '../../../providers/transaction_provider.dart';
 
 class ExchangeWidget extends StatefulWidget {
-  const ExchangeWidget({super.key});
+  const ExchangeWidget(this.token, {super.key});
+  final String token;
   @override
   State<StatefulWidget> createState() => _ExchangeWidgetState();
 }
@@ -74,11 +75,11 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             onPressed: () {
               Navigator.pop(context);
               exchangeMoney(
-                _itemSelectedToSell.currencyCode,
-                _itemSelectedToBuy.currencyCode,
-                int.parse(_sellTextController.text),
-                buyValue,
-              );
+                  _itemSelectedToSell.currencyCode,
+                  _itemSelectedToBuy.currencyCode,
+                  int.parse(_sellTextController.text),
+                  buyValue,
+                  widget.token);
             },
             child: const Text('Yes'),
           ),
